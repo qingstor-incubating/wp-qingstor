@@ -25,7 +25,7 @@ function qingstor_http_status($response)
     }
 }
 
-function qingstor_display_message($type, $error)
+function qingstor_display_message($type, $error=NULL)
 {
     switch ($type) {
     case 'errors':
