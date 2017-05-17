@@ -98,13 +98,35 @@ function qingstor_get_service()
     return $service;
 }
 
+function qingstor_get_zone($bucket_name)
+{
+    if (empty($service = qingstor_get_service())) {
+        return QS_CLIENT_ERROR;
+    }
+    $url = sprintf("%s://%s.%s:%s",$service->config->protocol, $bucket_name, $service->config->host, $service->config->port);
+    stream_context_set_default(
+        array(
+            'http' => array(
+                'method' => 'HEAD'
+            )
+        )
+    );
+    $headers = get_headers($url,1);
+    if (isset($headers["Location"])){
+        return explode(".",$headers["Location"])[1];
+    }
+    else{
+        return NULL;
+    }
+}
+
 function qingstor_bucket_test()
 {
     if (empty($service = qingstor_get_service())) {
         return QS_CLIENT_ERROR;
     }
     $options = get_option('qingstor-options');
-    $bucket = $service->Bucket($options['bucket_name'], 'pek3a');
+    $bucket = $service->Bucket($options['bucket_name'], qingstor_get_zone($options['bucket_name']));
     $res = $bucket->head();
     return qingstor_http_status($res);
 }
@@ -120,7 +142,7 @@ function qingstor_get_bucket()
         return NULL;
     }
     $options = get_option('qingstor-options');
-    $bucket = $service->Bucket($options['bucket_name'], 'pek3a');
+    $bucket = $service->Bucket($options['bucket_name'], qingstor_get_zone($options['bucket_name']));
     $res = $bucket->head();
     if (($ret = qingstor_http_status($res)) != QS_REQUEST_OK) {
         return NULL;
