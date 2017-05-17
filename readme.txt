@@ -36,6 +36,11 @@ After setting:
 
 == Changelog ==
 
+= 0.3.4 =
+* Fixed hardcode Bucket zone problem
+* Fixed an error while saving configuration
+* Fixed PHP version checking
+
 = 0.3.3 =
 * Added error detection when saving settings
 * Fixed tab display error when switching

@@ -5,19 +5,22 @@ Plugin URI:  https://github.com/yungkcx/QingStor-Plugin-for-WordPress
 Description: QingStor Plugin for WordPress. The Backup function requires zip and mysqldump program.
 Text Domain: wp-qingstor
 Domain Path: languages/
-Version:     0.3.3
+Version:     0.3.4
 Author:      yungkcx
 Author URI:  http://yungkcx.github.io
 */
+
+define('MINUMUM_PHP_VERSION', '5.6.0');
+define('MINUMUM_WP_VERSION', '4.5');
+
+if (version_compare(PHP_VERSION, MINUMUM_PHP_VERSION, '<'))
+    wp_die(__('<p>The <strong>WP-QingStor</strong> plugin requires PHP version '.MINUMUM_PHP_VERSION.' or higher.</p>', 'wp-qingstor'), 'Plugin Activation Error', array( 'response'=>200, 'back_link'=>TRUE ) );
 
 require_once 'vendor/autoload.php';
 require_once 'php/qingstor-functions.php';
 require_once 'php/qingstor-upload.php';
 require_once 'php/qingstor-menu.php';
 require_once 'php/qingstor-backup.php';
-
-define('MINUMUM_PHP_VERSION', '5.6.0');
-define('MINUMUM_WP_VERSION', '4.5');
 
 register_activation_hook(__FILE__, 'qingstor_activation');
 register_uninstall_hook(__FILE__, 'qingstor_uninstall');

@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the WP-QingStor package.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP-QingStor 0.3.3\n"
+"Project-Id-Version: WP-QingStor 0.3.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-qingstor\n"
-"POT-Creation-Date: 2017-03-11 09:35:59+00:00\n"
+"POT-Creation-Date: 2017-05-17 04:23:19+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -244,13 +244,13 @@ msgstr ""
 msgid "Save Changes"
 msgstr ""
 
-#: qingstor.php:37
+#: qingstor.php:40
 msgid ""
 "<p>WP Cron is disabled and is required by <strong>WP-QingStor</strong>. "
 "Please define DISABLE_WP_CRON as false in wp-config.php.</p>"
 msgstr ""
 
-#: qingstor.php:59
+#: qingstor.php:62
 msgid ""
 "<p><strong>zip</strong> and <strong>mysqldump</strong> command are not "
 "available and are required by <strong>WP-QingStor</strong>. Please install "
