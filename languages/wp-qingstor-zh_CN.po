@@ -1,11 +1,10 @@
-# Copyright (C) 2017 WP-QingStor
+# Copyright (C) 2019 WP-QingStor
 # This file is distributed under the same license as the WP-QingStor package.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP-QingStor 0.3.4\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-qingstor\n"
-"POT-Creation-Date: 2017-05-17 04:23:19+00:00\n"
-"PO-Revision-Date: 2017-MO-DA HO:MI+ZONE\n"
+"Project-Id-Version: WP-QingStor 0.1.0\n"
+"POT-Creation-Date: 2019-07-17 14:27:19+00:00\n"
+"PO-Revision-Date: 2019-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -28,14 +27,6 @@ msgstr "WordPress 安装目录不可读。"
 #: php/qingstor-functions.php:43
 msgid "wp-content directory is not writable."
 msgstr "wp-content 目录不可写。"
-
-#: php/qingstor-functions.php:46
-msgid "Require zip."
-msgstr "需要 zip 程序。"
-
-#: php/qingstor-functions.php:49
-msgid "Require mysqldump."
-msgstr "需要 mysqldump 程序。"
 
 #: php/qingstor-functions.php:52
 msgid "Invalid Bucket URL."
@@ -61,71 +52,65 @@ msgstr "Bucket 设置"
 msgid "Upload Settings"
 msgstr "上传设置"
 
-#: php/qingstor-setting-page.php:6
-msgid "Backup Settings"
-msgstr "备份设置"
-
-#: php/qingstor-setting-page.php:23
+#: php/qingstor-setting-page.php:20
 msgid "The following items need to be created at "
 msgstr "以下项目需要在"
 
-#: php/qingstor-setting-page.php:23
+#: php/qingstor-setting-page.php:20
 msgid "QingCloud Console"
 msgstr "QingCloud 控制台"
 
-#: php/qingstor-setting-page.php:23
+#: php/qingstor-setting-page.php:20
 msgid "."
 msgstr "手动创建。"
 
-#: php/qingstor-setting-page.php:44
+#: php/qingstor-setting-page.php:41
 msgid "Name"
 msgstr "名称"
 
-#: php/qingstor-setting-page.php:48
-msgid "All backups and Media files will be uploaded to the Bucket."
-msgstr "备份和 Media 文件将上传至该 Bucket。"
+#: php/qingstor-setting-page.php:45
+msgid "Media files will be uploaded to the Bucket."
+msgstr "Media 文件将上传至该 Bucket。"
 
-#: php/qingstor-setting-page.php:53
+#: php/qingstor-setting-page.php:50
 msgid "Automaticlly Set Policy"
 msgstr "自动设置存储空间策略"
 
-#: php/qingstor-setting-page.php:56
+#: php/qingstor-setting-page.php:53
 msgid ""
-"(Will set Acl as public read and set Bucket Policy as deny all users to get "
-"object from backup prefix. If not necessary, do not change it.)"
+"(Will set Acl as public read. If not necessary, do not change it.)"
 msgstr ""
-"（将设置 Bucket 的权限为公开可读，以及设置存储空间策略为禁止所有用户对备份文"
-"件所在目录进行操作。如非必要，无需修改。）"
+"（将设置 Bucket 的权限为公开可读。如非必要，无需修改。）"
 
-#: php/qingstor-setting-page.php:63 php/qingstor-setting-page.php:109
+#: php/qingstor-setting-page.php:60
 msgid "Operations"
 msgstr "操作"
 
-#: php/qingstor-setting-page.php:64
+#: php/qingstor-setting-page.php:61
 msgid "Sync wp-content/uploads/ to Bucket"
 msgstr "上传 wp-content/uploads 目录"
 
-#: php/qingstor-setting-page.php:65 php/qingstor-setting-page.php:111
+#: php/qingstor-setting-page.php:62
 msgid "Settings"
 msgstr "设置"
 
-#: php/qingstor-setting-page.php:71
+#: php/qingstor-setting-page.php:68
 msgid "File Types"
 msgstr "文件类型"
 
-#: php/qingstor-setting-page.php:75
+#: php/qingstor-setting-page.php:72
 msgid "File suffixes to upload."
 msgstr "要上传的文件后缀。"
 
-#: php/qingstor-setting-page.php:80
+#: php/qingstor-setting-page.php:77
 msgid "Upload Prefix"
 msgstr "指定前缀"
 
-#: php/qingstor-setting-page.php:84
+#: php/qingstor-setting-page.php:81
 msgid "Media Files will be uploaded to the directory."
 msgstr "Medai 文件将上传至该目录。"
 
-#: php/qingstor-setting-page.php:93
+#: php/qingstor-setting-page.php:90
 msgid ""
 "Bucket URL. If there is a CDN, please fill in according to the actual "
 "situation. (Should add http:// or https://)"
@@ -133,123 +118,11 @@ msgstr ""
 "Bucket 的 URL。如果开启了 CDN，请根据实际情况填写 CDN 的 URL。（注意添加 "
 "http:// 或 https://）"
 
-#: php/qingstor-setting-page.php:98
-msgid "Automaticlly Replace the Media Files "
-msgstr "自动替换资源文件 "
-
-#: php/qingstor-setting-page.php:110
-msgid "Backup Now"
-msgstr "立即备份"
-
-#: php/qingstor-setting-page.php:116
-msgid "Backup Prefix"
-msgstr "指定前缀"
-
-#: php/qingstor-setting-page.php:120
-msgid "Backups will be stored in the directory."
-msgstr "备份文件将保存到该目录。"
-
-#: php/qingstor-setting-page.php:125
-msgid "Scheduled Backup"
-msgstr "定时备份"
-
-#: php/qingstor-setting-page.php:129
-msgid "Manually Only"
-msgstr "仅手动备份"
-
-#: php/qingstor-setting-page.php:130
-msgid "Once Hourly"
-msgstr "每小时一次"
-
-#: php/qingstor-setting-page.php:131
-msgid "Twice Daily"
-msgstr "两天一次"
-
-#: php/qingstor-setting-page.php:132
-msgid "Once Daily"
-msgstr "每天一次"
-
-#: php/qingstor-setting-page.php:133
-msgid "Once Weekly"
-msgstr "每周一次"
-
-#: php/qingstor-setting-page.php:134
-msgid "Once Every Two Weeks"
-msgstr "两周一次"
-
-#: php/qingstor-setting-page.php:135
-msgid "Once Monthly"
-msgstr "每月一次"
-
-#: php/qingstor-setting-page.php:141
-msgid "Start Day"
-msgstr "开始日期"
-
-#: php/qingstor-setting-page.php:145
-msgid "Monday"
-msgstr "星期一"
-
-#: php/qingstor-setting-page.php:146
-msgid "Tuesday"
-msgstr "星期二"
-
-#: php/qingstor-setting-page.php:147
-msgid "Wednesday"
-msgstr "星期三"
-
-#: php/qingstor-setting-page.php:148
-msgid "Thursday"
-msgstr "星期四"
-
-#: php/qingstor-setting-page.php:149
-msgid "Friday"
-msgstr "星期五"
-
-#: php/qingstor-setting-page.php:150
-msgid "Saturday"
-msgstr "星期六"
-
-#: php/qingstor-setting-page.php:151
-msgid "Sunday"
-msgstr "星期日"
-
-#: php/qingstor-setting-page.php:157
-msgid "Start Day of Month"
-msgstr "开始日期"
-
-#: php/qingstor-setting-page.php:165
-msgid "Start Time"
-msgstr "开始时间"
-
-#: php/qingstor-setting-page.php:171
-msgid "Hours"
-msgstr "时"
-
-#: php/qingstor-setting-page.php:175
-msgid "Minutes"
-msgstr "分"
-
-#: php/qingstor-setting-page.php:178
-msgid "24-hour format."
-msgstr "24 小时制。（依赖 WordPress 的时区设置）"
-
-#: php/qingstor-setting-page.php:183
-msgid "Number of backups to store"
-msgstr "保存备份文件的最大数量"
-
-#: php/qingstor-setting-page.php:192
-msgid "Email to "
-msgstr "邮件通知"
-
-#: php/qingstor-setting-page.php:196
-msgid "If it cannot send a mail, check your PHP mail settings."
-msgstr "如果不能发送，请检查 PHP 邮件相关配置。"
-
-#: php/qingstor-setting-page.php:233
+#: php/qingstor-setting-page.php:114
 msgid "Save Changes"
 msgstr "保存设置"
 
-#: qingstor.php:40
+#: qingstor.php:39
 msgid ""
 "<p>WP Cron is disabled and is required by <strong>WP-QingStor</strong>. "
 "Please define DISABLE_WP_CRON as false in wp-config.php.</p>"
@@ -257,35 +130,21 @@ msgstr ""
 "<p>WP Cron 被禁用了。<strong>WP-QingStor</strong> 需要 WP Cron 才能正常工作。"
 "请在 wp-config.php 中将 DISABLE_WP_CRON 设为 false。</p>"
 
-#: qingstor.php:62
-msgid ""
-"<p><strong>zip</strong> and <strong>mysqldump</strong> command are not "
-"available and are required by <strong>WP-QingStor</strong>. Please install "
-"them.</p>"
-msgstr ""
-"<p>插件需要 <strong>zip</strong> 和 <strong>mysqldump</strong> 命令才能正常工"
-"作。请先安装这两个命令。</p>"
-
 #. Plugin Name of the plugin/theme
 msgid "WP-QingStor"
 msgstr "QingStor 插件"
 
 #. Plugin URI of the plugin/theme
-msgid "https://github.com/yungkcx/QingStor-Plugin-for-WordPress"
+msgid "https://github.com/yunify/wp-qingstor"
 msgstr ""
 
 #. Description of the plugin/theme
 msgid ""
-"QingStor Plugin for WordPress. The Backup function requires zip and "
-"mysqldump program."
+"QingStor Plugin for WordPress."
 msgstr ""
 
 #. Author of the plugin/theme
-msgid "yungkcx"
-msgstr ""
-
-#. Author URI of the plugin/theme
-msgid "http://yungkcx.github.io"
+msgid "yungkcx, maydusa"
 msgstr ""
 
 #~ msgid "(If not necessary, do not change it.)"

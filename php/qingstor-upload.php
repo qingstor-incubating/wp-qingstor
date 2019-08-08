@@ -9,20 +9,54 @@ final class QingStorUpload
     public function __construct()
     {
         add_action('add_attachment', array($this, 'add_attachment'));
-        add_filter('the_content', array($this, 'the_content'));
-        add_filter('wp_calculate_image_srcset', array($this, 'calculate_image_srcset'));
         add_action('qingstor_scheduled_upload_hook', array($this, 'upload_files'));
+        add_action('delete_local_file', array($this, 'delete_local_file'));
+        add_action('delete_attachment', array($this, 'delete_attachment'));
+        add_filter('upload_dir', array($this, 'upload_dir'));
+        add_filter('intermediate_image_sizes_advanced', array($this, 'intermediate_image_sizes_advanced'));
     }
 
     public static function get_instance()
     {
-        if (! (self::$instance instanceof QingStorUpload)) {
+        if (!(self::$instance instanceof QingStorUpload)) {
             self::$instance = new QingStorUpload();
         }
         return self::$instance;
     }
 
-    public function get_files_local_and_remote($dirname, $basedir, $prefix) {
+    /**
+     * Hook function, auto Sync to QingStor Bucket when upload Media files to WordPress.
+     * @param string $post_ID
+     */
+    public function add_attachment($post_ID)
+    {
+        $wp_upload_dir = wp_get_upload_dir();
+        $attach_url = wp_get_attachment_url($post_ID);
+        $file_path = $wp_upload_dir['basedir'] . str_replace($wp_upload_dir['baseurl'], "", $attach_url);
+        $data = array('file' => end(explode($wp_upload_dir['basedir'] . '/', $file_path)));
+        $this->upload_data($data);
+    }
+
+    /**
+     * Hook function, delete the file on QingStor Bucket.
+     * @param string $post_id
+     */
+    public function delete_attachment($post_id)
+    {
+        $options = get_option('qingstor-options');
+        $attach_url = wp_get_attachment_url($post_id);
+        $wp_upload_dir = wp_get_upload_dir();
+        $bucket = qingstor_get_bucket();
+        if (empty($bucket)) {
+            return;
+        }
+        $filename = str_replace($wp_upload_dir['baseurl'] . '/', "", $attach_url);
+        $object = $options['upload_prefix'] . $filename;
+        $bucket->deleteObject($object);
+    }
+
+    public function get_files_local_and_remote($dirname, $basedir, $prefix)
+    {
         $dir = opendir($dirname);
         $files = array();
         while ($file = readdir($dir)) {
@@ -39,8 +73,11 @@ final class QingStorUpload
         return $files;
     }
 
-    // Upload wp-content/uploads/
-    public function upload_uploads() {
+    /**
+     * Upload all files in wp-content/uploads to QingStor Bucket.
+     */
+    public function upload_uploads()
+    {
         if (($ret = qingstor_bucket_test()) != QS_REQUEST_OK) {
             return $ret;
         }
@@ -51,15 +88,20 @@ final class QingStorUpload
         return QS_REQUEST_OK;
     }
 
-    public function scheduled_upload_files($local_remote_path) {
+    public function scheduled_upload_files($local_remote_path)
+    {
         wp_schedule_single_event(time() + 1, 'qingstor_scheduled_upload_hook', array($local_remote_path));
     }
 
-    // Upload multiple files.
-    public function upload_files($local_remote_path) {
-        define('MB', 1024*1024);
-        define('GB', MB*1024);
-        define('TB', GB*1024);
+    /**
+     * Upload multiple files.
+     * @param array $local_remote_path Array(key: localpath, value: remote_path).
+     */
+    public function upload_files($local_remote_path)
+    {
+        define('MB', 1024 * 1024);
+        define('GB', MB * 1024);
+        define('TB', GB * 1024);
         set_time_limit(0);
         if (empty($bucket = qingstor_get_bucket())) {
             return QS_CLIENT_ERROR;
@@ -67,15 +109,15 @@ final class QingStorUpload
 
         foreach ($local_remote_path as $local_path => $remote_path) {
             if (file_exists($local_path)) {
-	            /**
-	             * If the file is less than 5GB, use putObject(), else use multipart upload.
-	             * Not support the file larger than 50TB.
-	             */
-                if (($size = filesize($local_path)) < GB*5) {
-                    $bucket->putObject($remote_path, array('body' => file_get_contents($local_path)));
-                } elseif ($size < TB*50) {
+                /**
+                 * If the file is less than 5GB, use putObject(), else use multipart upload.
+                 * Not support the file larger than 50TB.
+                 */
+                if (($size = filesize($local_path)) < GB * 5) {
+                    $res_upload_qingstor = $bucket->putObject($remote_path, array('body' => file_get_contents($local_path)));
+                } elseif ($size < TB * 50) {
                     $offset = 0;
-                    $step   = 5*GB;
+                    $step   = 5 * GB;
                     $nparts = 0;
                     // Use md5 value of the first 512 bytes of the file for etag.
                     $etag   = md5(file_get_contents($local_path, null, null, 0, 512));
@@ -85,9 +127,9 @@ final class QingStorUpload
                         return $ret;
                     }
                     $upload_id = $res->{'upload_id'};
-	                // If there will be a block less than 4MB, then add 5GB to it and priority process.
-                    if ($size % (5*GB) < 4*MB) {
-                        $tmp_step = (int)((($size % (5*GB)) + 5*GB) / 2 + 1);
+                    // If there will be a block less than 4MB, then add 5GB to it and priority process.
+                    if ($size % (5 * GB) < 4 * MB) {
+                        $tmp_step = (int) ((($size % (5 * GB)) + 5 * GB) / 2 + 1);
                         for ($i = 0; $i < 2; $i++) {
                             $bucket->uploadMultipart(
                                 $remote_path,
@@ -122,7 +164,7 @@ final class QingStorUpload
                         )
                     );
                     $object_parts = $res->{'object_parts'};
-                    $bucket->completeMultipartUpload(
+                    $res_upload_qingstor = $bucket->completeMultipartUpload(
                         $remote_path,
                         array(
                             'upload_id' => $upload_id,
@@ -131,13 +173,18 @@ final class QingStorUpload
                         )
                     );
                 }
+
+                // delete the file after uploading successfully
+                if ($res_upload_qingstor->statusCode == 201) {
+                    wp_schedule_single_event(time() + 1, 'delete_local_file', array($local_path));
+                }
             }
         }
     }
 
     /**
-     * Upload files by metadata.
-     * @param array $data  metadata or array with the key 'file'
+     * Upload files.
+     * @param array $data array with the key 'file'
      */
     public function upload_data($data)
     {
@@ -149,106 +196,43 @@ final class QingStorUpload
             return;
         }
 
-        // Upload Original image or other files.
         $files[$wp_upload_dir['basedir'] . '/' . $data['file']] = $upload_prefix . $data['file'];
-
-        // Upload thumbnails.
-        if (isset($data['sizes']) && count($data['sizes']) > 0) {
-            foreach ($data['sizes'] as $key => $thumb_data) {
-                $files[$wp_upload_dir['basedir'] . '/' . substr($data['file'], 0, 8) . $thumb_data['file']] =
-                    $upload_prefix . substr($data['file'], 0, 8) . $thumb_data['file'];
-            }
-        }
-
-        $this->scheduled_upload_files($files);
+        $this->upload_files($files);
     }
 
     /**
-     * Match the URL of Media files in article.
-     * @param String $data
-     * @return array
+     * Hook function, delete the file after uploading to QingStor Bucket.
+     * @param string $local_path The local path of the original file of the uploaded file.
      */
-    public function preg_match_all_url($data)
+    public function delete_local_file($local_path)
     {
-        $options = get_option('qingstor-options');
-        $p = '/=[\"|\'](https?:\/\/[^\s]*\.(' . $options['upload_types'] . '))[\"|\'| ]/iU';
-        $num = preg_match_all($p, $data, $matches);
-
-        return $num ? $matches[1] : array();
+        if (file_exists($local_path)) {
+            unlink($local_path);
+        }
     }
 
     /**
-     * Get the URL of Media files in QingStor Bucket.
-     * @param $object
-     * @return string
+     * Hook function, set url and baseurl of media file.
+     * @param array $uploads Array includes path, basedir, subdir, url, baseurl.
+     * @return $uploads Modified array.
      */
-    public function get_object_url($url)
+    public function upload_dir($uploads)
     {
-        $wp_upload_dir = wp_get_upload_dir();
         $options = get_option('qingstor-options');
-        if (strstr($url, $wp_upload_dir['baseurl']) != false) {
-            $object = end(explode($wp_upload_dir['baseurl'], $url));
-            return $options['bucket_url'] . $options['upload_prefix'] . ltrim($object, '/');
-        }
-        return $url;
+        $uploads['url'] = $options['bucket_url'] . $options['upload_prefix'] . substr($uploads['subdir'], 1);
+        $uploads['baseurl'] = $options['bucket_url'] . substr($options['upload_prefix'], 0, -1);
+        return $uploads;
     }
 
-    // Hook function. Auto Sync to QingStor Bucket when upload Media files to WordPress.
-    public function add_attachment($post_ID)
+    /**
+     * Hook function, set to abandon genarate thumbnail.
+     * @param array $sizes Array includes information about the file's size.
+     * @return $sizes.
+     */
+    public function intermediate_image_sizes_advanced($sizes)
     {
-        $wp_upload_dir = wp_get_upload_dir();
-        $attach_url = wp_get_attachment_url($post_ID);
-        $file_path = $wp_upload_dir['basedir'] . '/' . ltrim($attach_url, $wp_upload_dir['baseurl']);
-        $file_type = wp_check_filetype($file_path);
-
-        if (strstr($file_type['type'], 'image') == false) {
-            // 非图片文件
-            $data = array('file' => end(explode($wp_upload_dir['basedir'] . '/', $file_path)));
-        } else {
-            $data = wp_generate_attachment_metadata($post_ID, $file_path);
-        }
-        $this->upload_data($data);
-    }
-
-    // Hook function. Replace the URL of Media files when article is rendering.
-    public function the_content($content)
-    {
-        if (! get_option('qingstor-options')['replace_url']) {
-            return $content;
-        }
-        $matches = $this->preg_match_all_url($content);
-
-        foreach ($matches as $url) {
-            $bucket_url = $this->get_object_url($url);
-            $content = str_replace($url, $bucket_url, $content);
-        }
-        return $content;
-    }
-
-    // Hook function. Set srcset for images.
-    public function calculate_image_srcset($src)
-    {
-        if (! get_option('qingstor-options')['replace_url']) {
-            return $src;
-        }
-        $wp_upload_dir = wp_get_upload_dir();
-
-        foreach ($src as $key => &$value) {
-            if (strstr($value['url'], $wp_upload_dir['baseurl']) != false) {
-                $bucket_url = $this->get_object_url($value['url']);
-                $value['url'] = $bucket_url;
-            }
-        }
-        return $src;
-    }
-
-    public function get_bucket_url_code($url) {
-        $headers = get_headers($url);
-        $code = substr($headers[0], 9, 3);
-        if ($code != '200') {
-            return QS_INVALID_BUCKET_URL;
-        }
-        return QS_REQUEST_OK;
+        $sizes = null;
+        return $sizes;
     }
 }
 

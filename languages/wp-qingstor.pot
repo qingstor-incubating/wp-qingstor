@@ -1,14 +1,13 @@
-# Copyright (C) 2017 WP-QingStor
+# Copyright (C) 2019 WP-QingStor
 # This file is distributed under the same license as the WP-QingStor package.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP-QingStor 0.3.4\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-qingstor\n"
-"POT-Creation-Date: 2017-05-17 04:23:19+00:00\n"
+"Project-Id-Version: WP-QingStor 0.1.0\n"
+"POT-Creation-Date: 2019-07-17 14:27:19+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2019-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
@@ -26,14 +25,6 @@ msgstr ""
 
 #: php/qingstor-functions.php:43
 msgid "wp-content directory is not writable."
-msgstr ""
-
-#: php/qingstor-functions.php:46
-msgid "Require zip."
-msgstr ""
-
-#: php/qingstor-functions.php:49
-msgid "Require mysqldump."
 msgstr ""
 
 #: php/qingstor-functions.php:52
@@ -60,201 +51,73 @@ msgstr ""
 msgid "Upload Settings"
 msgstr ""
 
-#: php/qingstor-setting-page.php:6
-msgid "Backup Settings"
-msgstr ""
-
-#: php/qingstor-setting-page.php:23
+#: php/qingstor-setting-page.php:20
 msgid "The following items need to be created at "
 msgstr ""
 
-#: php/qingstor-setting-page.php:23
+#: php/qingstor-setting-page.php:20
 msgid "QingCloud Console"
 msgstr ""
 
-#: php/qingstor-setting-page.php:23
+#: php/qingstor-setting-page.php:20
 msgid "."
 msgstr ""
 
-#: php/qingstor-setting-page.php:44
+#: php/qingstor-setting-page.php:41
 msgid "Name"
 msgstr ""
 
-#: php/qingstor-setting-page.php:48
-msgid "All backups and Media files will be uploaded to the Bucket."
-msgstr ""
-
-#: php/qingstor-setting-page.php:53
+#: php/qingstor-setting-page.php:50
 msgid "Automaticlly Set Policy"
 msgstr ""
 
-#: php/qingstor-setting-page.php:56
+#: php/qingstor-setting-page.php:53
 msgid ""
-"(Will set Acl as public read and set Bucket Policy as deny all users to get "
-"object from backup prefix. If not necessary, do not change it.)"
+"(Will set Acl as public read. If not necessary, do not change it.)"
 msgstr ""
 
-#: php/qingstor-setting-page.php:63 php/qingstor-setting-page.php:109
+#: php/qingstor-setting-page.php:60
 msgid "Operations"
 msgstr ""
 
-#: php/qingstor-setting-page.php:64
+#: php/qingstor-setting-page.php:61
 msgid "Sync wp-content/uploads/ to Bucket"
 msgstr ""
 
-#: php/qingstor-setting-page.php:65 php/qingstor-setting-page.php:111
+#: php/qingstor-setting-page.php:62
 msgid "Settings"
 msgstr ""
 
-#: php/qingstor-setting-page.php:71
+#: php/qingstor-setting-page.php:68
 msgid "File Types"
 msgstr ""
 
-#: php/qingstor-setting-page.php:75
+#: php/qingstor-setting-page.php:72
 msgid "File suffixes to upload."
 msgstr ""
 
-#: php/qingstor-setting-page.php:80
+#: php/qingstor-setting-page.php:77
 msgid "Upload Prefix"
 msgstr ""
 
-#: php/qingstor-setting-page.php:84
+#: php/qingstor-setting-page.php:81
 msgid "Media Files will be uploaded to the directory."
 msgstr ""
 
-#: php/qingstor-setting-page.php:93
+#: php/qingstor-setting-page.php:90
 msgid ""
 "Bucket URL. If there is a CDN, please fill in according to the actual "
 "situation. (Should add http:// or https://)"
 msgstr ""
 
-#: php/qingstor-setting-page.php:98
-msgid "Automaticlly Replace the Media Files "
-msgstr ""
-
-#: php/qingstor-setting-page.php:110
-msgid "Backup Now"
-msgstr ""
-
-#: php/qingstor-setting-page.php:116
-msgid "Backup Prefix"
-msgstr ""
-
-#: php/qingstor-setting-page.php:120
-msgid "Backups will be stored in the directory."
-msgstr ""
-
-#: php/qingstor-setting-page.php:125
-msgid "Scheduled Backup"
-msgstr ""
-
-#: php/qingstor-setting-page.php:129
-msgid "Manually Only"
-msgstr ""
-
-#: php/qingstor-setting-page.php:130
-msgid "Once Hourly"
-msgstr ""
-
-#: php/qingstor-setting-page.php:131
-msgid "Twice Daily"
-msgstr ""
-
-#: php/qingstor-setting-page.php:132
-msgid "Once Daily"
-msgstr ""
-
-#: php/qingstor-setting-page.php:133
-msgid "Once Weekly"
-msgstr ""
-
-#: php/qingstor-setting-page.php:134
-msgid "Once Every Two Weeks"
-msgstr ""
-
-#: php/qingstor-setting-page.php:135
-msgid "Once Monthly"
-msgstr ""
-
-#: php/qingstor-setting-page.php:141
-msgid "Start Day"
-msgstr ""
-
-#: php/qingstor-setting-page.php:145
-msgid "Monday"
-msgstr ""
-
-#: php/qingstor-setting-page.php:146
-msgid "Tuesday"
-msgstr ""
-
-#: php/qingstor-setting-page.php:147
-msgid "Wednesday"
-msgstr ""
-
-#: php/qingstor-setting-page.php:148
-msgid "Thursday"
-msgstr ""
-
-#: php/qingstor-setting-page.php:149
-msgid "Friday"
-msgstr ""
-
-#: php/qingstor-setting-page.php:150
-msgid "Saturday"
-msgstr ""
-
-#: php/qingstor-setting-page.php:151
-msgid "Sunday"
-msgstr ""
-
-#: php/qingstor-setting-page.php:157
-msgid "Start Day of Month"
-msgstr ""
-
-#: php/qingstor-setting-page.php:165
-msgid "Start Time"
-msgstr ""
-
-#: php/qingstor-setting-page.php:171
-msgid "Hours"
-msgstr ""
-
-#: php/qingstor-setting-page.php:175
-msgid "Minutes"
-msgstr ""
-
-#: php/qingstor-setting-page.php:178
-msgid "24-hour format."
-msgstr ""
-
-#: php/qingstor-setting-page.php:183
-msgid "Number of backups to store"
-msgstr ""
-
-#: php/qingstor-setting-page.php:192
-msgid "Email to "
-msgstr ""
-
-#: php/qingstor-setting-page.php:196
-msgid "If it cannot send a mail, check your PHP mail settings."
-msgstr ""
-
-#: php/qingstor-setting-page.php:233
+#: php/qingstor-setting-page.php:114
 msgid "Save Changes"
 msgstr ""
 
-#: qingstor.php:40
+#: qingstor.php:39
 msgid ""
 "<p>WP Cron is disabled and is required by <strong>WP-QingStor</strong>. "
 "Please define DISABLE_WP_CRON as false in wp-config.php.</p>"
-msgstr ""
-
-#: qingstor.php:62
-msgid ""
-"<p><strong>zip</strong> and <strong>mysqldump</strong> command are not "
-"available and are required by <strong>WP-QingStor</strong>. Please install "
-"them.</p>"
 msgstr ""
 
 #. Plugin Name of the plugin/theme
@@ -262,19 +125,14 @@ msgid "WP-QingStor"
 msgstr ""
 
 #. Plugin URI of the plugin/theme
-msgid "https://github.com/yungkcx/QingStor-Plugin-for-WordPress"
+msgid "https://github.com/maydusa/wp-qingstor"
 msgstr ""
 
 #. Description of the plugin/theme
 msgid ""
-"QingStor Plugin for WordPress. The Backup function requires zip and "
-"mysqldump program."
+"QingStor Plugin for WordPress."
 msgstr ""
 
 #. Author of the plugin/theme
-msgid "yungkcx"
-msgstr ""
-
-#. Author URI of the plugin/theme
-msgid "http://yungkcx.github.io"
+msgid "maydusa"
 msgstr ""

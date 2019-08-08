@@ -31,8 +31,9 @@ QingStor 对象存储服务 WordPress 插件，支持定时备份，自动同步
 
 == Screenshots ==
 
-1. QingStor 定时备份
-2. QingStor 设置
+1. QingStor 设置
+2. 上传设置
+3. 备份设置
 
 == Changelog ==
 
