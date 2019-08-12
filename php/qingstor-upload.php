@@ -1,11 +1,8 @@
 <?php
-
 define('QS_INVALID_BUCKET_URL', 31);
-
 final class QingStorUpload
 {
     private static $instance;
-
     public function __construct()
     {
         add_action('add_attachment', array($this, 'add_attachment'));
@@ -15,7 +12,6 @@ final class QingStorUpload
         add_filter('upload_dir', array($this, 'upload_dir'));
         add_filter('intermediate_image_sizes_advanced', array($this, 'intermediate_image_sizes_advanced'));
     }
-
     public static function get_instance()
     {
         if (!(self::$instance instanceof QingStorUpload)) {
@@ -23,7 +19,6 @@ final class QingStorUpload
         }
         return self::$instance;
     }
-
     /**
      * Hook function, auto Sync to QingStor Bucket when upload Media files to WordPress.
      * @param string $post_ID
@@ -36,7 +31,6 @@ final class QingStorUpload
         $data = array('file' => end(explode($wp_upload_dir['basedir'] . '/', $file_path)));
         $this->upload_data($data);
     }
-
     /**
      * Hook function, delete the file on QingStor Bucket.
      * @param string $post_id
@@ -54,7 +48,6 @@ final class QingStorUpload
         $object = $options['upload_prefix'] . $filename;
         $bucket->deleteObject($object);
     }
-
     public function get_files_local_and_remote($dirname, $basedir, $prefix)
     {
         $dir = opendir($dirname);
@@ -72,7 +65,6 @@ final class QingStorUpload
         closedir($dir);
         return $files;
     }
-
     /**
      * Upload all files in wp-content/uploads to QingStor Bucket.
      */
@@ -87,12 +79,10 @@ final class QingStorUpload
         $this->scheduled_upload_files($files);
         return QS_REQUEST_OK;
     }
-
     public function scheduled_upload_files($local_remote_path)
     {
         wp_schedule_single_event(time() + 1, 'qingstor_scheduled_upload_hook', array($local_remote_path));
     }
-
     /**
      * Upload multiple files.
      * @param array $local_remote_path Array(key: localpath, value: remote_path).
@@ -106,7 +96,6 @@ final class QingStorUpload
         if (empty($bucket = qingstor_get_bucket())) {
             return QS_CLIENT_ERROR;
         }
-
         foreach ($local_remote_path as $local_path => $remote_path) {
             if (file_exists($local_path)) {
                 /**
@@ -121,7 +110,6 @@ final class QingStorUpload
                     $nparts = 0;
                     // Use md5 value of the first 512 bytes of the file for etag.
                     $etag   = md5(file_get_contents($local_path, null, null, 0, 512));
-
                     $res = $bucket->initiateMultipartUpload($remote_path);
                     if (($ret = qingstor_http_status($res)) != QS_REQUEST_OK) {
                         return $ret;
@@ -173,7 +161,6 @@ final class QingStorUpload
                         )
                     );
                 }
-
                 // delete the file after uploading successfully
                 if ($res_upload_qingstor->statusCode == 201) {
                     wp_schedule_single_event(time() + 1, 'delete_local_file', array($local_path));
@@ -181,7 +168,6 @@ final class QingStorUpload
             }
         }
     }
-
     /**
      * Upload files.
      * @param array $data array with the key 'file'
@@ -191,15 +177,12 @@ final class QingStorUpload
         $wp_upload_dir = wp_get_upload_dir();
         $bucket = qingstor_get_bucket();
         $upload_prefix = get_option('qingstor-options')['upload_prefix'];
-
         if (empty($upload_prefix) || empty($bucket)) {
             return;
         }
-
         $files[$wp_upload_dir['basedir'] . '/' . $data['file']] = $upload_prefix . $data['file'];
         $this->upload_files($files);
     }
-
     /**
      * Hook function, delete the file after uploading to QingStor Bucket.
      * @param string $local_path The local path of the original file of the uploaded file.
@@ -210,7 +193,6 @@ final class QingStorUpload
             unlink($local_path);
         }
     }
-
     /**
      * Hook function, set url and baseurl of media file.
      * @param array $uploads Array includes path, basedir, subdir, url, baseurl.
@@ -223,7 +205,6 @@ final class QingStorUpload
         $uploads['baseurl'] = $options['bucket_url'] . substr($options['upload_prefix'], 0, -1);
         return $uploads;
     }
-
     /**
      * Hook function, set to abandon genarate thumbnail.
      * @param array $sizes Array includes information about the file's size.
@@ -235,5 +216,4 @@ final class QingStorUpload
         return $sizes;
     }
 }
-
 QingStorUpload::get_instance();
