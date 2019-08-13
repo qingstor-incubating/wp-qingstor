@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP-QingStor
 Plugin URI:  https://github.com/yunify/wp-qingstor
-Description: QingStor Plugin for WordPress, support auto sync Media Library and delete local files. This project is based on the secondary development of yunify/wp-qingstor.
+Description: QingStor Plugin for WordPress, support auto sync Media Library and delete local files.
 Text Domain: wp-qingstor
 Domain Path: languages/
 Version:     0.4.0
