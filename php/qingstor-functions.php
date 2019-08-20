@@ -25,57 +25,50 @@ function qingstor_http_status($response)
     }
 }
 
-function qingstor_display_message($type, $error=NULL)
+function qingstor_display_message($type, $error = NULL)
 {
     switch ($type) {
-    case 'errors':
-        switch ($error) {
-        case QS_CLIENT_ERROR:
-            $message = __('Incorrect Bucket Settings.', 'wp-qingstor');
-            break;
-        case QS_SERVER_ERROR:
-            $message = __('QingStor server error, please wait.', 'wp-qingstor');
-            break;
-        case QS_ABSPATH_NOT_READABLE:
-            $message = __('WordPress directory is not readable.', 'wp-qingstor');
-            break;
-        case QS_WP_CONTENT_NOT_WRITABLE:
-            $message = __('wp-content directory is not writable.', 'wp-qingstor');
-            break;
-        case QS_NOZIP:
-            $message = __('Require zip.', 'wp-qingstor');
-            break;
-        case QS_NOMYSQLDUMP:
-            $message = __('Require mysqldump.', 'wp-qingstor');
-            break;
-        case QS_INVALID_BUCKET_URL:
-            $message = __('Invalid Bucket URL.', 'wp-qingstor');
-            break;
-        }
-?>
-    <div id="message" class="error">
-        <p><?php echo $message; ?></p>
-    </div>
-<?php
+        case 'errors':
+            switch ($error) {
+                case QS_CLIENT_ERROR:
+                    $message = __('Incorrect Bucket Settings.', 'wp-qingstor');
+                    break;
+                case QS_SERVER_ERROR:
+                    $message = __('QingStor server error, please wait.', 'wp-qingstor');
+                    break;
+                case QS_ABSPATH_NOT_READABLE:
+                    $message = __('WordPress directory is not readable.', 'wp-qingstor');
+                    break;
+                case QS_WP_CONTENT_NOT_WRITABLE:
+                    $message = __('wp-content directory is not writable.', 'wp-qingstor');
+                    break;
+                case QS_INVALID_BUCKET_URL:
+                    $message = __('Invalid Bucket URL.', 'wp-qingstor');
+                    break;
+            }
+            ?>
+        <div id="message" class="error">
+            <p><?php echo $message; ?></p>
+        </div>
+        <?php
         break;
-    case 'once_backup':
     case 'upload_uploads':
     case 'settings':
-?>
-    <div id="setting-error-settings_updated" class="updated settings-error notice is-dismissible">
-        <p>
-            <strong><?php 
-            if ($type == 'settings') {
-                _e('Settings saved.', 'wp-qingstor');
-            } else {
-                _e('Background task start.', 'wp-qingstor');
-            }
-            ?></strong>
-        </p>
-    </div>
-<?php
+        ?>
+        <div id="setting-error-settings_updated" class="updated settings-error notice is-dismissible">
+            <p>
+                <strong><?php
+                        if ($type == 'settings') {
+                            _e('Settings saved.', 'wp-qingstor');
+                        } else {
+                            _e('Background task start.', 'wp-qingstor');
+                        }
+                        ?></strong>
+            </p>
+        </div>
+        <?php
         break;
-    }
+}
 }
 
 /**
@@ -103,7 +96,7 @@ function qingstor_get_zone($bucket_name)
     if (empty($service = qingstor_get_service())) {
         return QS_CLIENT_ERROR;
     }
-    $url = sprintf("%s://%s.%s:%s",$service->config->protocol, $bucket_name, $service->config->host, $service->config->port);
+    $url = sprintf("%s://%s.%s:%s", $service->config->protocol, $bucket_name, $service->config->host, $service->config->port);
     stream_context_set_default(
         array(
             'http' => array(
@@ -111,11 +104,10 @@ function qingstor_get_zone($bucket_name)
             )
         )
     );
-    $headers = get_headers($url,1);
-    if (isset($headers["Location"])){
-        return explode(".",$headers["Location"])[1];
-    }
-    else{
+    $headers = get_headers($url, 1);
+    if (isset($headers["Location"])) {
+        return explode(".", $headers["Location"])[1];
+    } else {
         return NULL;
     }
 }
@@ -238,32 +230,16 @@ function qingstor_test_bucket_name($name)
     return $name;
 }
 
-function qingstor_test_prefix($prefix) {
+function qingstor_test_prefix($prefix)
+{
     $prefix = sanitize_text_field($prefix);
     return ltrim(rtrim($prefix, '/') . '/', '/');
 }
 
-function qingstor_test_url($url) {
+function qingstor_test_url($url)
+{
     $url = esc_url($url);
     return rtrim($url, '/') . '/';
-}
-
-function qingstor_test_num($num, $min, $max)
-{
-    $num = intval($num);
-    if (! $num || $num > $max || $num < $min) {
-        return $min;
-    }
-    return $num;
-}
-
-function qingstor_test_email($email)
-{
-    $email = sanitize_email($email);
-    if (is_email($email)) {
-        return $email;
-    }
-    return '';
 }
 
 // Get URL of current page for redirect.
@@ -271,32 +247,27 @@ function qingstor_get_page_url()
 {
     $pageURL = 'http';
 
-    if ($_SERVER["HTTPS"] == "on")
-    {
+    if ($_SERVER["HTTPS"] == "on") {
         $pageURL .= "s";
     }
     $pageURL .= "://";
 
     $this_page = $_SERVER["REQUEST_URI"];
 
-    if (strpos($this_page, "?") !== false)
-    {
+    if (strpos($this_page, "?") !== false) {
         $this_pages = explode("?", $this_page);
         $this_page = reset($this_pages);
     }
 
-    if ($_SERVER["SERVER_PORT"] != "80")
-    {
+    if ($_SERVER["SERVER_PORT"] != "80") {
         $pageURL .= $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"] . $this_page;
-    }
-    else
-    {
+    } else {
         $pageURL .= $_SERVER["SERVER_NAME"] . $this_page;
     }
     return $pageURL;
 }
 
-// After `Upload the directory wp-content/uploads/' or `Backup Now'.
+// After `Upload the directory wp-content/uploads/'.
 function qingstor_redirect()
 {
     $url = qingstor_get_page_url() . '?page=qingstor';

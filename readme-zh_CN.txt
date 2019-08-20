@@ -1,14 +1,14 @@
 === QingStor 对象存储 ===
 
-Contributors:       yungkcx
-Tags:               wordpress, Backup, QingStor
+Contributors:       yungkcx, maydusa
+Tags:               wordpress, QingStor
 Requires at least:  4.5
 Tested up to:       4.7
 Stable tag:         trunk
 License:            GPLv2 or later
 License URI:        http://www.gnu.org/licenses/gpl-2.0.html
 
-QingStor 对象存储服务 WordPress 插件，支持定时备份，自动同步媒体库。
+QingStor 对象存储服务 WordPress 插件，自动同步媒体库。
 
 == Description ==
 
@@ -16,11 +16,8 @@ QingStor 对象存储服务 WordPress 插件，支持定时备份，自动同步
 
 当你设置好插件的各项参数并启用后：
 
-1. 向媒体库上传文件时，会自动上传到设置好的 QingStor Bucket。
-2. 开启 `自动替换资源文件 URL`，插件会在文章渲染时自动替换资源文件的 URL 为 Bucket 地址。
-3. 定时备份的邮件通知依赖 PHP email 的相关设置。
-4. 备份功能需要安装有 zip 和 mysqldump 程序，可分别在终端使用 `zip --version` 和 `mysqldump --version` 命令检查。
-5. 开启 `自动设置存储空间策略` 后，插件会设置 Bucket 的权限为‘公开可读’，以及设置存储空间策略为‘禁止所有用户对备份文件所在目录操作’。如非必要，无需修改。
+1. 向媒体库上传文件时，会自动上传到设置好的 QingStor Bucket，不会在本地留存图片和缩略图。
+2. 开启 `自动设置存储空间策略` 后，插件会设置 Bucket 的权限为‘公开可读’，以及设置存储空间策略为‘禁止所有用户对备份文件所在目录操作’。如非必要，无需修改。
 
 == Installation ==
 
@@ -31,10 +28,14 @@ QingStor 对象存储服务 WordPress 插件，支持定时备份，自动同步
 
 == Screenshots ==
 
-1. QingStor 定时备份
-2. QingStor 设置
+1. QingStor 设置
+2. 上传设置
 
 == Changelog ==
+
+= 0.4.0 =
+* 上传文件不会在本地留存，对于图片，不会生成缩略图
+* 移除备份模块
 
 = 0.3.4 =
 * 修复了 Bucket zone 的错误
